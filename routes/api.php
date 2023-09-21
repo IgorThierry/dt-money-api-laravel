@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Transaction\CreateTransactionController;
+use App\Http\Controllers\Transaction\DeleteTransactionController;
+use App\Http\Controllers\Transaction\ListTransactionsByUserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,7 +23,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
         return $request->user();
     });
 
-    Route::get('/transactions', function () {
-        return ['test' => 'test'];
-    });
+    Route::get('/transactions', ListTransactionsByUserController::class);
+    Route::post('/transactions', CreateTransactionController::class);
+    Route::delete('/transactions/{id}', DeleteTransactionController::class);
 });

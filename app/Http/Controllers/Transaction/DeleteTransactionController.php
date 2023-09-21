@@ -10,8 +10,7 @@ class DeleteTransactionController extends Controller
     /**
      * Handle the incoming request.
      */
-    public function __invoke(Request $request)
+    public function __invoke(Request $request, $id)
     {
-        //
     }
 }
