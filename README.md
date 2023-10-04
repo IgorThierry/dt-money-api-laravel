@@ -7,60 +7,148 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Objetivo
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Projeto criado para fins didáticos.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Sobre o projeto
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Uma simples API para cadastro de transações feita com Laravel e Sanctum.
 
-## Learning Laravel
+A interface de usuario se encontra no repositorio [DT Money V2](https://github.com/IgorThierry/ignite-react-dtmoney-v2/tree/laravel-api).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Como executar o projeto
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Pré-requisitos
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+-   Docker
+-   Docker Compose
+-   PHP
+-   Composer
 
-## Laravel Sponsors
+### Executando o projeto
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+Clone o repositório com:
 
-### Premium Partners
+```bash
+git clone git@github.com:IgorThierry/dt-money-api-laravel.git
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+Entre na pasta do projeto:
 
-## Contributing
+```bash
+cd dt-money-api-laravel
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Instale as dependências com:
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Crie o arquivo `.env` com:
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Gere a chave da aplicação com:
 
-## License
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Preencha o arquivo `.env` com as informações do banco de dados:
+
+```bash
+# senha padrão do banco de dados quando usamos o pacote sail
+# é "password"
+DB_PASSWORD=password
+```
+
+Crie uma senha para o usuário `admin` no arquivo `.env`:
+
+```bash
+# essa senha vai ser usada para autenticar o usuário admin
+ADMIN_PASSWORD=sua-senha
+```
+
+Suba os containers com:
+
+```bash
+./vendor/bin/sail up -d
+```
+
+Execute as migrations com:
+
+```bash
+./vendor/bin/sail artisan migrate
+```
+
+Execute os seeders com:
+
+```bash
+./vendor/bin/sail artisan db:seed
+```
+
+Acesse a aplicação em `http://localhost`
+
+## Testando a aplicação
+
+Para testar a aplicação basta utilizar o software de sua preferência, como o [Insomnia](https://insomnia.rest/download) ou o [Postman](https://www.postman.com/downloads/).
+
+Na raiz desse projeto tem um arquivo com as rotas da aplicação, que você pode importar no Insomnia ou Postman.
+
+`COLLECTION.har`
+
+## Rotas
+
+### Autenticação
+
+#### Show Laravel Version
+
+`GET /`
+
+#### Login
+
+`POST /login`
+
+```json
+{
+    "email": "admin@test.com.br",
+    "password": "sua-senha"
+}
+```
+
+#### Logout
+
+`POST /logout`
+
+### User
+
+Mostra informações do usuário logado
+
+`GET /api/user`
+
+### Transações
+
+#### Listar transações
+
+`GET /api/transactions`
+
+#### Criar transação
+
+`POST /api/transactions`
+
+```json
+{
+    "description": "Lanche",
+    "type": "outcome",
+    "price": 49.9,
+    "category": "comida"
+}
+```
+
+#### Deletar transação
+
+`DELETE /api/transactions/{id}`
