@@ -24,6 +24,10 @@ class Transaction extends Model
         'createdAt',
     ];
 
+    protected $casts = [
+        'price' => 'double',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);
